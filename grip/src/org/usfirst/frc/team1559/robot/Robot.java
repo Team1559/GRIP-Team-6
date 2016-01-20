@@ -17,12 +17,7 @@ public class Robot extends IterativeRobot {
     
     
     public void autonomousInit() {
-    	
-    }
-   
-    
-    public void autonomousPeriodic() {
-    	
+
     	double[] x = new double[0];
     	while(true) {
     		double[] lines = table.getNumberArray("line", x);
@@ -31,6 +26,11 @@ public class Robot extends IterativeRobot {
     		}
     		System.out.println("ayy lmao");
     	}
+    }
+   
+    
+    public void autonomousPeriodic() {
+    	
     }
 
     
