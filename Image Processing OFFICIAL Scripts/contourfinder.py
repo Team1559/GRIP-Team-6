@@ -8,21 +8,17 @@ import server
 cx = 0
 cy = 0
 
+s = server.Server()
+
 # create video capture
 cap = cv2.VideoCapture(0)
-
-#setup socket
-server.setup()
-
-
-##BROKEN##
-#while(1):
-#	server.receive()
-#	server.isKill()
 
 
 
 while(1):
+	
+
+
 
     # read the frames #
     _,frame = cap.read()
@@ -41,26 +37,42 @@ while(1):
 
     # finding contour with maximum area and store it as best_cnt #
     max_area = 0
-    for cnt in contours:
+    best_cnt = None
+    
+    for i, cnt in enumerate(contours):
+        if i > 100:
+            break
         area = cv2.contourArea(cnt)
         if area > max_area:
             max_area = area
             best_cnt = cnt
+        
+    if best_cnt == None:
+         cx = cy = -1
+         print "Nothing Found"
+    else:
+    	# finding centroids of best_cnt and draw a circle there #
+    	M = cv2.moments(best_cnt)
+    	hull_cnt = cv2.convexHull(best_cnt)
+    	#print max_area/cv2.contourArea(hull_cnt)
+    	cv2.drawContours(frame, hull_cnt, -1, (0,255,0), 3)
+    	cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+    	cv2.circle(frame,(cx,cy),5,255,-1)
 
-    # finding centroids of best_cnt and draw a circle there #
-    M = cv2.moments(best_cnt)
-    hull_cnt = cv2.convexHull(best_cnt)
-    print max_area/cv2.contourArea(hull_cnt)
-    cv2.drawContours(frame, hull_cnt, -1, (0,255,0), 3)
-    cx,cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
-    cv2.circle(frame,(cx,cy),5,255,-1)
 
-	#send across socket
-    server.send(cx, cy)
+
+	#socket setup
+    #data = s.receive()
+    #if data:
+    s.accept()
+    s.send(cx, cy)
+    s.close()
+        
 
 	#print for testing
     print cx
     print cy
+    print 
 
 
 # Clean up everything before leaving

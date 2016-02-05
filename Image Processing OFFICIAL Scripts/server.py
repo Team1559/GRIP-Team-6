@@ -2,49 +2,54 @@
 import socket
 import sys
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-#host = socket.gethostname()
 port = 15559
-host = "10.15.59.6"
-x = 0
-y = 0
-#kill = False
-
-def setup():
-	s.bind((host,port))
+host = "10.15.59.6" #good fix n8
 
 
-def send(x, y):
-	s.listen(5)
-	c, ref = s.accept()
-	cx = str(x)
-	cy = str(y)
-	newline = "\n"
-	xheader = "X Value: "
-	yheader = "Y Value: "
-	sx = xheader + cx + newline
-	sy = yheader + cy
-	c.send(sx)
-	c.send(sy)
+class Server(object):
 
-def receive():
-	s.listen(5)
-	c, ref = s.accept()
-	killCode = c.recv()
+	def __init__(self):
+
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.s.setblocking(0)
+		#host = socket.gethostname()
+		self.s.bind((host,port))
+		self.s.listen(5)
 
 
-###Broken###
-def isKill():
-	if(killCode == "true"):
-		kill = True
-	return kill
+	def send(self, x, y):
+		if self.c == None:
+			return
+		try:	
+			self.c.send("X Value: %d\n" % x)
+			self.c.send("Y Value: %d\n" % y)
+		except socket.error:
+			pass
 
+
+	def receive(self):
+		if self.c == None:
+			return
+		try:
+			r = self.c.recv(1024)
+			print r
+			return r
+		except socket.error:
+			pass
+
+
+	def accept(self):
+		try:
+			self.c, ref = self.s.accept()
+		except socket.error:
+			self.c = None
 	
 
-def close():
-	c.close()
-	sys.exit()
+	def close(self):
+		if self.c == None:
+			return
+		self.c.close()
 	
 
 

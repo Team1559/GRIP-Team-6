@@ -1,5 +1,5 @@
 
-### Will Merges a.k.a. "The Socket God" ###
+###AYYY LMAO###
 
 import sys
 import contourfinder
