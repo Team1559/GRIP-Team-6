@@ -1,8 +1,0 @@
-FIRST Robotics 2016 code for goal tracking/aiming on Raspberry Pi!
-
-To run:
--Execute python script "aimbot.py"
--Implement "socketclient.java" class into your robot code
--Call "socketclient.java" in your robot/java main class
--Change drive code to function with your robot
--Enjoy!
