@@ -5,26 +5,26 @@ import numpy as np
 
 class Reader(object):
 
-	path = "/media/pi/WILL/config.gripe"
+	path = "/media/pi/GRIPE/config.gripe"
 
 
 	def __init__(self):
-		
+
 		with open(self.path, "r") as self.target:
 			self.read()
-		
-	
+
+
 	def read(self):
-		
+
 		self.target.seek(0)
 		stringlist = self.target.readlines()
 
-		hlow = int(stringlist[0])
-		slow = int(stringlist[1])
-		vlow = int(stringlist[2])
-		hhigh = int(stringlist[3])
-		shigh = int(stringlist[4])
-		vhigh = int(stringlist[5])
+		hhigh = int(stringlist[0])
+		shigh = int(stringlist[1])
+		vhigh = int(stringlist[2])
+		hlow = int(stringlist[3])
+		slow = int(stringlist[4])
+		vlow = int(stringlist[5])
 
 		self.brightness = float(stringlist[6])
 		self.lowValue = np.array((hlow,slow,vlow))
@@ -39,12 +39,3 @@ class Reader(object):
 
 	def getBrightness(self):
 		return self.brightness
-
-
-
-
-
-
-
-
-	

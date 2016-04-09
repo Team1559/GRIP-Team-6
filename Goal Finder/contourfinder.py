@@ -11,21 +11,25 @@ import math
 import time
 import angle
 import distance
-import gripereader
+import gripejuicer
+import i2c
 
 
 
 #read the USB drive
 try:
-	r = gripereader.Reader()
+	r = gripejuicer.Reader()
 	lowValue = r.getLowValue()
 	highValue = r.getHighValue()
 	brightness = r.getBrightness()
 except (IOError, IndexError, ValueError):
 	print "No drive found, using standard values"
-	lowValue = np.array((60,120,0))
-	highValue = np.array((100,255,255))	
+	lowValue = np.array((60,120,10))
+	highValue = np.array((100,255,255))
 	brightness = 0.0
+	#lowValue = np.array((70,120,10))
+	#highValue = np.array((120,255,255))
+
 
 print lowValue
 print highValue
@@ -49,7 +53,7 @@ sys.stderr.write("Image Processing Working\n")
 
 
 #create camera variables
-width = 720
+width = 800
 height = 480
 
 
@@ -69,8 +73,8 @@ maxxyratio = -10000
 
 #create data to be sent
 global error
-global distance
-global angle
+global dist
+global ang
 error = 0
 dist = 0.0
 ang = 0.0
@@ -78,6 +82,11 @@ ang = 0.0
 
 #open the server
 serialserver.startServer()
+
+
+#open the i2c channel
+i2c = i2c.I2C()
+
 
 
 while(1):
@@ -108,7 +117,7 @@ while(1):
     best_cnt = None
 
     #sort by greatest areas
-    contours = sorted(contours, key = cv2.contourArea, reverse = True)[:3]
+    contours = sorted(contours, key = cv2.contourArea, reverse = True)[:4]
 
 
     for cnt in contours:
@@ -117,7 +126,7 @@ while(1):
         if area < min_area:
              continue
 
-	    #filter by ratio of contour area/ bounding rectangle area
+	#filter by ratio of contour area/ bounding rectangle area
         rx,ry,rw,rh = cv2.boundingRect(cnt)
         arearatio = rw * rh / area
 
@@ -129,10 +138,10 @@ while(1):
         yratio = (cy-ry)/(rh*1.0)
         xratio = (cx-rx)/(rw*1.0)
         xyratio = yratio/xratio
-        print xyratio
-        if 1.14 < xyratio < 1.34:
+        #print xyratio
+        if 1.05 < xyratio < 1.34:  #low originlly at 1.14
             best_cnt = cnt
-            print "Found Shape!"
+            #print "Found Shape!"
             break
 
 #        if 1.8 < arearatio < 3.8 and area > min_area:
@@ -142,7 +151,7 @@ while(1):
 
     #check if any shape was found
     if best_cnt == None:
-         cx = cy = -640 #sends a -1000 over serial
+         cx = cy = -600 #sends a -1000 over serial
          print "Nothing Found!"
     else:
     	#finding centroids of best_cnt and draw a circle there
@@ -155,8 +164,17 @@ while(1):
 
 
 
-    #find the error, distance, and angle
-    error = cx-360
+    #find the error
+    error = cx-400
+
+    #find the angle
+    if error != -1000:
+         ang = angle.getAngle(error)
+    else:
+        #no target found, do not calculate the angle
+        ang = -1000
+
+
 
 	#make sure there is an object before finding distance and angle
     #if (cy > -1 and cx > -1):
@@ -166,12 +184,15 @@ while(1):
 		#return -1 if no object is found
 		#ang = dist = -1
 
-    dist = 1
-    ang = 1 #the last airbender ayy lma0 this is ryluu
+    #dist = 1
 
 
     #give values to server
-    serialserver.putData(error)
+    serialserver.putData(ang)
+
+
+    #send the values over i2c
+    i2c.write(ang)
 
 
     #show the image based on user values
@@ -182,7 +203,7 @@ while(1):
 
 
     #print for testing
-    print error
+    #print ang
 
 
 

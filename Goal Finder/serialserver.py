@@ -20,11 +20,11 @@ class SerialServer(object):
 
 	def send(self, x):
 
-		err = x
-		#angle = y
-		#distance = z
-
-		port.write(err+"t")
+		#err = x
+		ang = x
+		#dist = z
+		print ang
+		port.write(ang+"t")
 
 
 
@@ -45,12 +45,11 @@ def run():
 	while(1):
 
 		message = port.read()
-		#print error
+		#print angle
 
 		if message == "s":
-
-			print error
-			s.send(str(error))
+                        print angle
+			s.send(str(angle))
 
 	print "bye bye"
 
@@ -62,8 +61,7 @@ def putData(x):
 	global distance
 	global angle
 
-	error = x
-	#angle = y
+	#error = x
+	angle = x
 	#distance = z
-
 
