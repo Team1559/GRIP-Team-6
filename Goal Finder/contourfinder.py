@@ -85,7 +85,7 @@ serialserver.startServer()
 
 
 #open the i2c channel
-i2c = i2c.I2C()
+i2c.startServer()
 
 
 
@@ -192,7 +192,7 @@ while(1):
 
 
     #send the values over i2c
-    i2c.write(ang)
+    i2c.putData(ang)
 
 
     #show the image based on user values

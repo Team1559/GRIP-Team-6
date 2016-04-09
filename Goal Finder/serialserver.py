@@ -30,7 +30,7 @@ class SerialServer(object):
 
 def startServer():
 
-	putData(-321)
+	putData(-100)
 
 	global s
 	s = SerialServer()
