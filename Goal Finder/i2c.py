@@ -8,7 +8,7 @@ class I2C(object):
 
 		print "init"
 
-		self.address = 0x5
+		self.address = 0x05
 		self.bus = smbus.SMBus(1)
 
 
@@ -16,14 +16,14 @@ class I2C(object):
 
 	    data = x
 
-	    self.bus.write_byte_data(address, data, 0)
+	    self.bus.write_byte_data(self.address, int(data), 0)
 
 
 	def fixData(self, x):
-		
+
 		#method to make data a 6 byte string
 		data = x
-
+		#print x
 
 		if data > 0: 
 			#data is postive
@@ -33,7 +33,7 @@ class I2C(object):
 				data = str(data)
 				data = data + "00" 
 				return data
-				
+
 			elif data > 10.00:
 				#data is 5 characters
 				data = str(data)
@@ -91,7 +91,7 @@ def run():
 
 		fixedData = i2c.fixData(angle)
 		print fixedData
-		#ic2.write(fixedData)
+		i2c.write(fixedData)
 
 
 
