@@ -8,11 +8,11 @@ logging.basicConfig(level=logging.DEBUG)
 import serialserver
 import sys
 import math
-import time
 import angle
 import distance
 import gripejuicer
-import i2c
+#import i2c
+#import timer
 
 
 
@@ -43,7 +43,7 @@ for arg in sys.argv:
     if arg == 'y':
         showImage = True
     elif arg.startswith("?"):
-        print 'help'
+        print 'y: show image \n n: do not show image \n if blank: does not show image'
     else:
         print 'unknown: "%s"' % arg
 
@@ -80,13 +80,16 @@ dist = 0.0
 ang = 0.0
 
 
-#open the server
+#start a timer for recording fps
+#fpscounter = timer.Timer()
+
+
+#open the serial server
 serialserver.startServer()
 
 
 #open the i2c channel
-i2c.startServer()
-
+#i2c.startServer()
 
 
 while(1):
@@ -144,15 +147,15 @@ while(1):
             #print "Found Shape!"
             break
 
-#        if 1.8 < arearatio < 3.8 and area > min_area:
-#           best_cnt = cnt
+        #if 1.8 < arearatio < 3.8 and area > min_area:
+           #best_cnt = cnt
         #print "area:", rw*rh / area
 
 
     #check if any shape was found
     if best_cnt == None:
          cx = cy = -600 #sends a -1000 over serial
-         print "Nothing Found!"
+         #print "Nothing Found!"
     else:
     	#finding centroids of best_cnt and draw a circle there
     	M = cv2.moments(best_cnt)
@@ -192,7 +195,11 @@ while(1):
 
 
     #send the values over i2c
-    i2c.putData(ang)
+    #i2c.putData(ang)
+
+
+    #count how many frames have been processed
+    #fpscounter.update()
 
 
     #show the image based on user values
@@ -203,8 +210,6 @@ while(1):
 
 
     #print for testing
-    #print ang
-
-
-
+    print ang
+    #print cy
 

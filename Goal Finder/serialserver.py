@@ -1,3 +1,4 @@
+#!/usr/bin/python
 
 import serial
 import sys
@@ -23,8 +24,9 @@ class SerialServer(object):
 		#err = x
 		ang = x
 		#dist = z
-		print ang
+		#print ang
 		port.write(ang+"t")
+		#print ang
 
 
 
@@ -48,7 +50,7 @@ def run():
 		#print angle
 
 		if message == "s":
-                        print angle
+                        #print angle
 			s.send(str(angle))
 
 	print "bye bye"

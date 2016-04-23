@@ -2,48 +2,38 @@ import smbus
 import thread
 
 
-#add encode method to encode data to UTF-8 string so the arduino can read it???????
-#necessary to encode if it goes right to the roborio
-
-
 class I2C(object):
 
 	def __init__(self):
 
-	    print "init"
+		print "init"
 
-	    self.address = 0x08
-	    self.bus = smbus.SMBus(1)
+		self.address = 0x05
+		self.bus = smbus.SMBus(1)
 
 
 	def write(self, x):
 
 	    data = x
-	    #print x
 
-	    try:
-		#print "werk"
-	    	self.bus.write_byte_data(self.address, 0, int(data))
-	    except:
-		pass
-		#i2c gets i/o errors a lot
+	    self.bus.write_byte_data(self.address, int(data), 0)
 
 
 	def fixData(self, x):
-
+		
 		#method to make data a 6 byte string
 		data = x
 		#print x
 
-		if data > 0:
+		if data > 0: 
 			#data is postive
 
 			if data < 10.00:
 				#data is 4 characters
 				data = str(data)
-				data = data + "00"
+				data = data + "00" 
 				return data
-
+				
 			elif data > 10.00:
 				#data is 5 characters
 				data = str(data)
@@ -83,19 +73,8 @@ class I2C(object):
 
 
 
-	def encode(data):
-
-	    x = data
-
-	    #make UNICODE string ASCII using UTF-8 string encoding
-
-	    return data
-
-
-
-
 def startServer():
-
+		
 	putData(-1000)
 
 	global i2c
@@ -111,7 +90,7 @@ def run():
 	while(1):
 
 		fixedData = i2c.fixData(angle)
-		#print fixedData
+		print fixedData
 		i2c.write(fixedData)
 
 
