@@ -4,6 +4,9 @@ import serial
 import sys
 import thread
 import time
+#import logging
+#logging.basicConfig(level=logging.debug)
+#import sys
 
 
 #lock = thread.allocate_lock()
@@ -51,6 +54,7 @@ def run():
 
 		if message == "s":
                         #print angle
+			#sys.stderrr.write(angle)
 			s.send(str(angle))
 
 	print "bye bye"

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+
+# Provides:	        aimbot.sh
+
+# Required-Start:	mountall
+
+# Required-Stop:	$remote_fs $syslog
+
+# Default-Start:	2 3 4 5
+
+# Default-Stop:		0 1 6
+
+# Short-Description:    start at boot
+
+# Description:		provided by daemon
+
+### END INIT INFO
+
+sleep 15:
+/home/pi/Desktop/ImageProcessing/contourfinder.py 2>/home/pi/Desktop/ImageProcessing/aimbotlog

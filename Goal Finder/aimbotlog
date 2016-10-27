@@ -1,1 +1,7 @@
 Image Processing Working
+OpenCV Error: Assertion failed ((scn == 3 || scn == 4) && (depth == CV_8U || depth == CV_32F)) in cvtColor, file /build/opencv-PNHF6g/opencv-2.4.9+dfsg/modules/imgproc/src/color.cpp, line 3959
+Traceback (most recent call last):
+  File "/home/pi/Desktop/ImageProcessing/contourfinder.py", line 104, in <module>
+    hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+cv2.error: /build/opencv-PNHF6g/opencv-2.4.9+dfsg/modules/imgproc/src/color.cpp:3959: error: (-215) (scn == 3 || scn == 4) && (depth == CV_8U || depth == CV_32F) in function cvtColor
+

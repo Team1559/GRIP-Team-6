@@ -24,8 +24,8 @@ try:
 	brightness = r.getBrightness()
 except (IOError, IndexError, ValueError):
 	print "No drive found, using standard values"
-	lowValue = np.array((60,120,10))
-	highValue = np.array((100,255,255))
+	lowValue = np.array((65,100,30)) #60, 120, 10
+	highValue = np.array((100,255,255)) #100, 255, 255
 	brightness = 0.0
 	#lowValue = np.array((70,120,10))
 	#highValue = np.array((120,255,255))
